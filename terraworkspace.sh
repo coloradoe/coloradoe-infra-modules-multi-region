@@ -1,30 +1,40 @@
 #!/bin/bash
 
 # Get the region
-while getopts r:n flag
+while getopts r: flag
 do
     case "${flag}" in
         r) region=${OPTARG};;
-        n) workspace=${OPTARG};;
+        *)
     esac
 done
 
-REGION=$1
-WORKSPACE=$2
+array=()
 
-# Select the workspace based on the region
-terraform workspace select $1
+for i in $(terraform workspace list| sed 's/*//g')
+do
+    array+=("$i")
+    echo "array[$i]"
+done
 
-# Set all subsequent folders to a workspace for that region
-for d in ./*/ ; do (cd "$d" && terraform workspace select $1); done
+if [[ ! " ${array[*]} " =~ " $region " ]];
+then
+    echo "Creating $region"
+    # Create workspace if workspace doesn't exist
+    terraform workspace new "$region"
+    # Create workspace in all subdirectories
+    for d in ./*/ ; do (cd "$d" && terraform workspace new "$region");done
+fi
 
-# Change the region in the terragrunt file to match the workspace
-#sed -i '.bak' 's/'"^[?:us-][?:\w{4}-][\d{1}]"'/'"$REGION"'/g
-sed -i '.bak' 's/changeme/'"$REGION"'/g' terragrunt.hcl
+if [[ " ${array[*]} " =~ " $region " ]];
+then
+    echo "Selecting $region"
+    # Select the workspace
+    terraform workspace select "$region"
+    # Select workspace in all subdirectories
+    for d in ./*/ ; do (cd "$d" && terraform workspace select "$region");done
+fi
 
-# Clean up
-rm terragrunt.hcl.bak
-
-# Show new region
-echo "New Region: $1"
+# Set region in terragrunt file
+hclq set 'locals.aws_region' "$region" < terragrunt.hcl | sponge terragrunt.hcl
 
