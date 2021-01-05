@@ -10,7 +10,7 @@ locals {
 module "log_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket                         = "logs-${terraform.workspace}"
+  bucket                         = "logs-488-rdp-${terraform.workspace}"
   acl                            = "log-delivery-write"
   force_destroy                  = true
   attach_elb_log_delivery_policy = true
