@@ -4,7 +4,7 @@ terraform {
 }
 
 locals {
-  bucket_name = "${var.bucket_name}-${terraform.workspace}"
+  bucket_name = "${var.s3.bucket_name}-${terraform.workspace}"
 }
 
 module "log_bucket" {
@@ -27,7 +27,7 @@ module "s3_bucket" {
   }
   
   tags = {
-    Environment = var.environment_tag
+    Environment = var.s3.environment_tag
   }
 
   # S3 bucket-level Public Access Block configuration
