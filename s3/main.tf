@@ -19,7 +19,7 @@ module "log_bucket" {
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket = locals.bucket_name
+  bucket = local.bucket_name
   acl    = "private"
 
   versioning = {
