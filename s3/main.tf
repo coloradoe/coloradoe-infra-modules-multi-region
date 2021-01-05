@@ -8,7 +8,7 @@ locals {
 }
 
 module "log_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws/"
+  source = "terraform-aws-modules/s3-bucket/aws"
 
   bucket                         = "logs-${terraform.workspace}"
   acl                            = "log-delivery-write"
