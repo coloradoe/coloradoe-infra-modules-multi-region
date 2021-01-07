@@ -4,13 +4,13 @@ terraform {
 }
 
 locals {
-  bucket_name = "${var.s3.bucket_name}-${terraform.workspace}"
+  bucket_name = "${var.s3.bucket_name}-${var.s3.workspace}"
 }
 
 module "log_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket                         = "logs-488-rdp-${terraform.workspace}"
+  bucket                         = "logs-488-rdp-${var.s3.workspace}"
   acl                            = "log-delivery-write"
   force_destroy                  = true
   attach_elb_log_delivery_policy = true
