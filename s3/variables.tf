@@ -5,8 +5,8 @@ variable "s3" {
     workspace = string
 })
 default = ({
-    bucket_name = "bucket-rdp-488-9293"
+    bucket_name = "bucket-rdp-488-demodemodemo7328"
     environment_tag = "Test" 
-    workspace = "us-west-2"
+    workspace = "us-east-2"
   })
 }
