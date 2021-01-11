@@ -4,13 +4,13 @@ terraform {
 }
 
 locals {
-  bucket_name = "${var.s3.bucket_name}-${var.s3.workspace}"
+  bucket_name = "${var.bucket_name}-${var.workspace}"
 }
 
 module "log_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket                         = "logs-488-rdp-${var.s3.workspace}"
+  bucket                         = "logs-488-rdp-${var.workspace}"
   acl                            = "log-delivery-write"
   force_destroy                  = true
   attach_elb_log_delivery_policy = true
@@ -27,7 +27,7 @@ module "s3_bucket" {
   }
   
   tags = {
-    Environment = var.s3.environment_tag
+    Environment = var.environment_tag
   }
 
   # S3 bucket-level Public Access Block configuration
